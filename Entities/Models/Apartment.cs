@@ -8,10 +8,12 @@ namespace Entities.Models;
 
 public class Apartment
 {
-    public Guid ApartmentId { get; set; }
+    [Column("ApartmentId")]
+    public Guid Id { get; set; }
     public string? Title { get; set; }
     public int AvailableRooms { get; set; }
     public string? Description { get; set; }
+    public decimal Price { get; set; }
 
     [ForeignKey(nameof(Address))]
     public Guid AddressId { get; set; }
