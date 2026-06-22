@@ -1,8 +1,11 @@
-﻿namespace Entities.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Entities.Models;
 
 public class Address
 {
-    public Guid AddressId { get; set; }
+    [Column("AddressId")]
+    public Guid Id { get; set; }
     public string? Street { get; set; }
     public string? Province { get; set; }
     public string? City { get; set; }
