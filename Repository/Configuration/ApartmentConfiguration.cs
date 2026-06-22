@@ -13,7 +13,7 @@ public class ApartmentConfiguration: IEntityTypeConfiguration<Apartment>
         builder.HasData(
             new Apartment
             {
-                ApartmentId = new Guid("7c9e6679-7425-40de-944b-e07fc1f90ae7"),
+                Id = new Guid("7c9e6679-7425-40de-944b-e07fc1f90ae7"),
                 Title = "Cozy Studio",
                 AvailableRooms = 2,
                 Description = "A nice place",
