@@ -3,5 +3,9 @@
   <Project Path="Entities/Entities.csproj" />
   <Project Path="LoggerService/LoggerService.csproj" />
   <Project Path="Repository/Repository.csproj" />
+  <Project Path="RoomRental.Presentation/RoomRental.Presentation.csproj" />
   <Project Path="RoomRental.Server/RoomRental.Server.csproj" />
+  <Project Path="Service.Contracts/Service.Contracts.csproj" />
+  <Project Path="Service/Service.csproj" />
+  <Project Path="Shared/Shared.csproj" Id="68f4e89a-45e0-4c08-90a0-efc9ff199d4f" />
 </Solution>
