@@ -1,8 +1,8 @@
+using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
 using RoomRental.Server;
 using RoomRental.Server.Extensions;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,16 +18,17 @@ builder.Services.ConfigureServiceManager();
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<MappingProfile>();
+    cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
 });
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(RoomRental.Presentation.AssemblyReference).Assembly);
 
 var app = builder.Build();
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigurationExceptionHandler(logger);
 
-if (app.Environment.IsDevelopment())
-    app.UseDeveloperExceptionPage();
-else
+if (app.Environment.IsProduction())
     app.UseHsts();
 
 // Configure the HTTP request pipeline.
