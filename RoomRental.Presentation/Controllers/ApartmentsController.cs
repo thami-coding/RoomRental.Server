@@ -14,15 +14,7 @@ public class ApartmentsController : ControllerBase
     [HttpGet]
     public IActionResult GetApartments()
     {
-        try
-        {
-            var apartments = _service.ApartmentService.GetAllApartments(trackChanges: false);
-            return Ok(apartments);
-        }
-        catch (Exception)
-        {
-
-            return StatusCode(500, "Internal server error");
-        }
+        var apartments = _service.ApartmentService.GetAllApartments(trackChanges: false);
+        return Ok(apartments);
     }
 }
