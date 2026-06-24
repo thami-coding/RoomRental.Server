@@ -21,18 +21,10 @@ internal sealed class ApartmentService : IApartmentService
 
     public IEnumerable<ApartmentDto> GetAllApartments(bool trackChanges)
     {
-        try
-        {
-            var apartments = _repository.Apartment.GetAllApartments(trackChanges);
-            var aprtmentsDto = _mapper.Map<IEnumerable<ApartmentDto>>(apartments);
 
-            return aprtmentsDto;
-        }
-        catch (Exception ex)
-        {
+        var apartments = _repository.Apartment.GetAllApartments(trackChanges);
+        var aprtmentsDto = _mapper.Map<IEnumerable<ApartmentDto>>(apartments);
 
-            _logger.LogError($"Something went wrong in the {nameof(GetAllApartments)} service method {ex}");
-            throw;
-        }
+        return aprtmentsDto;
     }
 }
