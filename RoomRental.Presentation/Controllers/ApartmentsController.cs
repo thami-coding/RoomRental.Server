@@ -17,4 +17,11 @@ public class ApartmentsController : ControllerBase
         var apartments = _service.ApartmentService.GetAllApartments(trackChanges: false);
         return Ok(apartments);
     }
+
+    [HttpGet("{id:guid}")]
+    public IActionResult GetApartment(Guid id)
+    {
+        var apartment = _service.ApartmentService.GetApartment(id, trackChanges: false);
+        return Ok(apartment);
+    }
 }
