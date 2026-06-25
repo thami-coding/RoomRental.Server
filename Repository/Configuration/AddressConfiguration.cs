@@ -15,7 +15,8 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
                 Street = "123 Main Street",
                 Province = "KwaZulu-Natal",
                 City = "Durban",
-                Suburb = "Berea"
+                Suburb = "Berea",
+                ApartmentId = new Guid("7c9e6679-7425-40de-944b-e07fc1f90ae7")
 
             }
         );
