@@ -18,7 +18,7 @@ public class ApartmentsController : ControllerBase
         return Ok(apartments);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}", Name ="ApartmentById")]
     public IActionResult GetApartment(Guid id)
     {
         var apartment = _service.ApartmentService.GetApartment(id, trackChanges: false);
