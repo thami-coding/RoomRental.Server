@@ -10,5 +10,15 @@ public class ApartmentRepository : RepositoryBase<Apartment>, IApartmentReposito
     { }
 
     public IEnumerable<Apartment> GetAllApartments(bool trackChanges) =>
-        FindAll(trackChanges).Include(a => a.Address).OrderBy(apartment => apartment.AvailableRooms).ToList();
+        FindAll(trackChanges).Include(a => a.Address)
+        .Include(a => a.Images)
+        .OrderBy(apartment => apartment.AvailableRooms)
+        .ToList();
+
+    public Apartment GetApartment(Guid apartmentId, bool trackChanges) =>
+        FindByCondition(a => a.Id.Equals(apartmentId), trackChanges)
+        .Include(a => a.Address)
+        .Include(a => a.Images)
+        .SingleOrDefault();
+
 }
