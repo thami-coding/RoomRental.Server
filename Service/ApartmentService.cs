@@ -35,7 +35,7 @@ internal sealed class ApartmentService : IApartmentService
         if (apartment is null)
             throw new ApartmentNotFoundException(id);
 
-        var apartmentDto = _mapper.Map<ApartmentDto>(null);
+        var apartmentDto = _mapper.Map<ApartmentDto>(apartment);
         return apartmentDto;
     }
 }
