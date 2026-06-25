@@ -21,8 +21,11 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
 });
 
-builder.Services.AddControllers()
-    .AddApplicationPart(typeof(RoomRental.Presentation.AssemblyReference).Assembly);
+builder.Services.AddControllers(config =>
+{
+    config.RespectBrowserAcceptHeader = true;
+    config.ReturnHttpNotAcceptable = true;
+}).AddApplicationPart(typeof(RoomRental.Presentation.AssemblyReference).Assembly);
 
 var app = builder.Build();
 var logger = app.Services.GetRequiredService<ILoggerManager>();
