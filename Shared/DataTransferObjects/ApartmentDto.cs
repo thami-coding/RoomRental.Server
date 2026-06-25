@@ -7,4 +7,5 @@ public class ApartmentDto
     public int AvailableRooms { get; set; }
     public string? Description { get; set; }
     public AddressDto? Address { get; set; }
+    public ICollection<ImageDto> Images { get; set; } = new List<ImageDto>();
 }
