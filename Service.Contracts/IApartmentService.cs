@@ -4,5 +4,6 @@ namespace Service.Contracts;
 
 public interface IApartmentService
 {
-    IEnumerable<ApartmentDto> GetAllApartments(bool trackChanges);
+    IEnumerable<ApartmentsDto> GetAllApartments(bool trackChanges);
+    ApartmentDto GetApartment(Guid apartmentId, bool trackChanges);
 }
