@@ -10,5 +10,6 @@ public class Address
     public string? Province { get; set; }
     public string? City { get; set; }
     public string? Suburb { get; set; }
-    public Apartment? Apartment { get; set; }
+    public Guid ApartmentId { get; set; }
+    public Apartment? Apartment { get; set; } 
 }
