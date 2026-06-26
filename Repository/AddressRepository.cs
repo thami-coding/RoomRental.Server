@@ -9,9 +9,11 @@ public class AddressRepository : RepositoryBase<Address>, IAddressRepository
         : base(repositoryContext) { }
 
 
+
     public Address GetAddress(Guid apartmentId, Guid id, bool trackChanges) =>
         FindByCondition(a => a.ApartmentId.Equals(apartmentId) && a.Id.Equals(id), trackChanges)
         .SingleOrDefault();
 
+    public void DeleteAddress(Address address) => Delete(address);
 
 }

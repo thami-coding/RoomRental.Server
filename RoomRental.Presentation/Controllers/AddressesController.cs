@@ -18,4 +18,11 @@ public class AddressesController : ControllerBase
         return Ok(address);
     }
 
+    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteAddressForApartment(Guid apartmentId, Guid id)
+    {
+        _service.AddressService.DeleteAddressForApartment(apartmentId, id, trackChanges: false);
+        return NoContent();
+    }
+
 }

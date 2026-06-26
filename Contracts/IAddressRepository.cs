@@ -5,4 +5,5 @@ namespace Contracts;
 public interface IAddressRepository
 {
    Address GetAddress(Guid addressId, Guid id, bool trackChanges);
+    void DeleteAddress(Address address);
 }
