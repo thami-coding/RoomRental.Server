@@ -32,6 +32,20 @@ internal sealed class AddressService : IAddressService
 
         var address = _mapper.Map<AddressDto>(addressDb);
         return address;
-        
+    }
+
+    public void DeleteAddressForApartment(Guid apartmentId, Guid id, bool trackChanges)
+    {
+        var apartment = _repository.Apartment.GetApartment(apartmentId, trackChanges);
+        if (apartment is null)
+            throw new ApartmentNotFoundException(apartmentId);
+
+        var addressForApartment = _repository.Address.GetAddress(apartmentId, id, trackChanges);
+        if (addressForApartment is null)
+            throw new AddressNotFoundException(id);
+
+        _repository.Address.DeleteAddress(addressForApartment);
+        _repository.Save();
+
     }
 }
