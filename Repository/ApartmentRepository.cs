@@ -6,8 +6,10 @@ namespace Repository;
 
 public class ApartmentRepository : RepositoryBase<Apartment>, IApartmentRepository
 {
-    public ApartmentRepository(RepositoryContext repositoryContext) : base(repositoryContext)
-    { }
+    public ApartmentRepository(RepositoryContext repositoryContext)
+        : base(repositoryContext) { }
+
+    public void CreateApartment(Apartment apartment) => Create(apartment);
 
     public IEnumerable<Apartment> GetAllApartments(bool trackChanges) =>
         FindAll(trackChanges).Include(a => a.Address)
