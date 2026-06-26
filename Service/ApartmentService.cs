@@ -38,4 +38,17 @@ internal sealed class ApartmentService : IApartmentService
         var apartmentDto = _mapper.Map<ApartmentDto>(apartment);
         return apartmentDto;
     }
+
+    public ApartmentDto CreateApartment(ApartmentForCreationDto apartment)
+    {
+        var apartmentEntity = _mapper.Map<Apartment>(apartment);
+
+        _repository.Apartment.CreateApartment(apartmentEntity);
+        _repository.Save();
+
+        var apartmentToReturn = _mapper.Map<ApartmentDto>(apartmentEntity);
+
+        return apartmentToReturn;
+    }
+
 }

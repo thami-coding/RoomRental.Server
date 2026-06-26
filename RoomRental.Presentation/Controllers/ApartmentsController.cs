@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 
 namespace RoomRental.Presentation.Controllers;
 
@@ -18,10 +19,21 @@ public class ApartmentsController : ControllerBase
         return Ok(apartments);
     }
 
-    [HttpGet("{id:guid}", Name ="ApartmentById")]
+    [HttpGet("{id:guid}", Name = "ApartmentById")]
     public IActionResult GetApartment(Guid id)
     {
         var apartment = _service.ApartmentService.GetApartment(id, trackChanges: false);
         return Ok(apartment);
+    }
+
+    [HttpPost]
+    public IActionResult CreateApartment([FromBody] ApartmentForCreationDto apartment)
+    {
+        if (apartment is null)
+            return BadRequest("ApartmentForCreation object is null");
+
+        var createdAparment = _service.ApartmentService.CreateApartment(apartment);
+
+        return CreatedAtRoute("ApartmentById", new { id = createdAparment.Id }, createdAparment);
     }
 }
