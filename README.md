@@ -1,11 +1,12 @@
 # 🏠 RoomRental API
 
-![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-blueviolet?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-the-badge&logo=dotnet&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-the-badge&logo=docker&logoColor=white)
+![xUnit](https://img.shields.io/badge/test-xUnit-blue?style=flat-square&logo=dotnet)
+![Swagger](https://img.shields.io/badge/-Swagger-%2385EA2D?style=flat-square&logo=swagger&logoColor=black)
+![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue?style=flat-square&logo=github-actions&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-the-badge)
 
 > A RESTful API for managing apartment rental listings built with **.NET 10**, **Onion Architecture**, and **PostgreSQL**.
 
@@ -34,13 +35,14 @@ RoomRental is a backend REST API that allows property managers to list apartment
 
 ## Architecture
 
-The solution follows **Clean Architecture** with a strict dependency rule — outer layers depend on inner layers, never the reverse.
+The solution follows **Onion Architecture** with a strict dependency rule — outer layers depend on inner layers, never the reverse.
+
 <img width="646" height="499" alt="image" src="https://github.com/user-attachments/assets/508b42f2-8b05-4320-8c8f-2bfccb1db048" />
 
 ## Features
 
 - ✅ **CRUD** operations for apartment listings
-- ✅ **Clean Architecture** with strict layer separation
+- ✅ **Onion Architecture** with strict layer separation
 - ✅ **Global error handling** with custom exceptions
 - ✅ **AutoMapper** for DTO mapping
 - ✅ **EF Core** with code-first migrations
@@ -49,6 +51,8 @@ The solution follows **Clean Architecture** with a strict dependency rule — ou
 - 🔜 Pagination, Filtering & Sorting
 - 🔜 Image uploads with cloud storage
 - 🔜 Rate limiting
+- 🔜 Unit tests
+- 🔜 Integration tests
 
 ---
 
@@ -196,4 +200,4 @@ dotnet run --project src/RoomRental.Server
 
 ---
 
-<p align="center">Built with ❤️ in Durban, South Africa 🇿🇦</p>
+<p align="center">Built with ❤️ by yours truly</p>
