@@ -8,4 +8,5 @@ public interface IApartmentService
     ApartmentDto GetApartment(Guid apartmentId, bool trackChanges);
     ApartmentDto CreateApartment(ApartmentForCreationDto apartment);
     void DeleteApartment(Guid apartmentId, bool trackChanges);
+    void UpdateApartment(Guid apartmentId, ApartmentForUpdateDto apartmentForUpdateDto, bool trackChanges);
 }

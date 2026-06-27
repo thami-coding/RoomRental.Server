@@ -59,4 +59,14 @@ internal sealed class ApartmentService : IApartmentService
         _repository.Apartment.DeleteApartment(apartment);
         _repository.Save();
     }
+
+    public void UpdateApartment(Guid apartmentId, ApartmentForUpdateDto apartmentForUpdate, bool trackChanges)
+    {
+        var apartmentEntity = _repository.Apartment.GetApartment(apartmentId,trackChanges);
+        if (apartmentEntity is null)
+            throw new ApartmentNotFoundException(apartmentId);
+
+        _mapper.Map(apartmentForUpdate, apartmentEntity);
+        _repository.Save();
+    }
 }
