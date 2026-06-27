@@ -23,4 +23,6 @@ public class ApartmentRepository : RepositoryBase<Apartment>, IApartmentReposito
         .Include(a => a.Images)
         .SingleOrDefault();
 
+    public void DeleteApartment(Apartment apartment) => Delete(apartment);
+
 }

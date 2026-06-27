@@ -36,4 +36,11 @@ public class ApartmentsController : ControllerBase
 
         return CreatedAtRoute("ApartmentById", new { id = createdAparment.Id }, createdAparment);
     }
+
+    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteApartment(Guid id)
+    {
+        _service.ApartmentService.DeleteApartment(id, trackChanges: false);
+        return NoContent();
+    }
 }

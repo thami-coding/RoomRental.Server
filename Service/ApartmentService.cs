@@ -22,7 +22,6 @@ internal sealed class ApartmentService : IApartmentService
 
     public IEnumerable<ApartmentsDto> GetAllApartments(bool trackChanges)
     {
-
         var apartments = _repository.Apartment.GetAllApartments(trackChanges);
         var aprtmentsDto = _mapper.Map<IEnumerable<ApartmentsDto>>(apartments);
 
@@ -51,4 +50,13 @@ internal sealed class ApartmentService : IApartmentService
         return apartmentToReturn;
     }
 
+    public void DeleteApartment(Guid apartmentId, bool trackChanges)
+    {
+        var apartment = _repository.Apartment.GetApartment(apartmentId, trackChanges);
+        if (apartment is null)
+            throw new ApartmentNotFoundException(apartmentId);
+
+        _repository.Apartment.DeleteApartment(apartment);
+        _repository.Save();
+    }
 }
