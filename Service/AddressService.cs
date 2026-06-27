@@ -13,7 +13,7 @@ internal sealed class AddressService : IAddressService
     private readonly IMapper _mapper;
 
 
-    public AddressService(IRepositoryManager repository, ILoggerManager logger,IMapper mapper)
+    public AddressService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
     {
         _repository = repository;
         _logger = logger;
@@ -47,5 +47,19 @@ internal sealed class AddressService : IAddressService
         _repository.Address.DeleteAddress(addressForApartment);
         _repository.Save();
 
+    }
+
+    public void UpdateAddressForApartment(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate, bool apartmentTrackChanges, bool addressTrackChanges)
+    {
+        var apartment = _repository.Apartment.GetApartment(apartmentId, apartmentTrackChanges);
+        if (apartment is null)
+            throw new ApartmentNotFoundException(apartmentId);
+
+        var addressEntity = _repository.Address.GetAddress(apartmentId, id, addressTrackChanges);
+        if (addressEntity is null)
+            throw new AddressNotFoundException(id);
+
+        _mapper.Map(addressForUpdate, addressEntity);
+        _repository.Save();
     }
 }

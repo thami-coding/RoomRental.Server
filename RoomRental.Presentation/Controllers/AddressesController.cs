@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 
 namespace RoomRental.Presentation.Controllers;
 
@@ -25,4 +26,16 @@ public class AddressesController : ControllerBase
         return NoContent();
     }
 
+
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateAddressForApartment(Guid apartmentId, Guid id, [FromBody] AddressForUpdateDto address)
+    {
+        if (address is null)
+            return BadRequest("ApartmentForUpdateDto object is null");
+
+        _service.AddressService.UpdateAddressForApartment(apartmentId, id, address, apartmentTrackChanges: false,
+            addresssTrackChanges: true);
+
+        return NoContent();
+    }
 }

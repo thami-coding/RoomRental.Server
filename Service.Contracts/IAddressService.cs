@@ -7,4 +7,6 @@ public interface IAddressService
 {
     AddressDto GetAddress(Guid addressId, Guid id, bool trackChanges);
     void DeleteAddressForApartment(Guid apartmentId, Guid id, bool trackChanges);
+    void UpdateAddressForApartment(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate,
+        bool apartmentTrackChanges, bool addresssTrackChanges);
 }
