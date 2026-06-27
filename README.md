@@ -9,6 +9,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-the-badge)
 
 > A RESTful API for managing apartment rental listings built with **.NET 10**, **Onion Architecture**, and **PostgreSQL**.
+> This project is still in development so not all features are working.
 
 ---
 
@@ -29,7 +30,7 @@
 
 ## About
 
-RoomRental is a backend REST API that allows property managers to list apartments and renters to discover and request rooms. Built as a portfolio project demonstrating Clean Architecture, professional Git workflows, and modern .NET development practices.
+RoomRental is a backend REST API that allows property managers to list apartments and renters to discover and request rooms. Built as a portfolio project demonstrating Onion Architecture, professional Git workflows, and modern .NET development practices.
 
 ---
 
