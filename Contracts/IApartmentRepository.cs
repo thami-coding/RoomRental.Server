@@ -8,4 +8,5 @@ public interface IApartmentRepository
     Apartment GetApartment(Guid id, bool trackChanges);
     void CreateApartment(Apartment apartment);
     void DeleteApartment(Apartment apartment);
+   
 }

@@ -43,4 +43,14 @@ public class ApartmentsController : ControllerBase
         _service.ApartmentService.DeleteApartment(id, trackChanges: false);
         return NoContent();
     }
+
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateApartment(Guid id, [FromBody] ApartmentForUpdateDto apartment)
+    {
+        if (apartment is null)
+            return BadRequest("ApartmentForUpdateDto object is null");
+
+        _service.ApartmentService.UpdateApartment(id, apartment, trackChanges: true);
+        return NoContent();
+    }
 }

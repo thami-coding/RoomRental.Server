@@ -15,5 +15,6 @@ public class MappingProfile : Profile
         CreateMap<Image, ImageDto>();
         CreateMap<ApartmentForCreationDto, Apartment>();
         CreateMap<AddressForCreationDto, Address>();
+        CreateMap<ApartmentForUpdateDto, Apartment>();
     }
 }
