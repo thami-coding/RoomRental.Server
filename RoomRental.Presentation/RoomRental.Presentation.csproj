@@ -9,6 +9,9 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="10.0.9" />
+	</ItemGroup>
+	<ItemGroup>
 	  <ProjectReference Include="..\Service.Contracts\Service.Contracts.csproj" />
 	</ItemGroup>
 </Project>

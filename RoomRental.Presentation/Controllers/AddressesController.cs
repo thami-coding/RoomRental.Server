@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -37,5 +38,23 @@ public class AddressesController : ControllerBase
             addresssTrackChanges: true);
 
         return NoContent();
+    }
+
+    [HttpPatch("{id:guid}")]
+    public IActionResult PartiallyUpdateAddressForApartment(Guid apartmentId, Guid id, 
+        [FromBody] JsonPatchDocument<AddressForUpdateDto> patchDoc)
+    {
+        if (patchDoc is null)
+            return BadRequest("patchDoc object sent from client is null.");
+
+        var result = _service.AddressService.GetAddressForPatch(apartmentId, id, apartmentTrackChanges: false,
+            addressTrackChanges: true);
+
+        patchDoc.ApplyTo(result.addressToPatch);
+
+        _service.AddressService.SaveChangesForPatch(result.addressToPatch, result.addressEntity);
+
+        return NoContent();
+
     }
 }

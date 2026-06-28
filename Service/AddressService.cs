@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.Exceptions;
+using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -60,6 +61,27 @@ internal sealed class AddressService : IAddressService
             throw new AddressNotFoundException(id);
 
         _mapper.Map(addressForUpdate, addressEntity);
+        _repository.Save();
+    }
+
+    public (AddressForUpdateDto addressToPatch, Address addressEntity) GetAddressForPatch(Guid apartmentId, Guid id, bool apartmentTrackChanges, bool addressTrackChanges)
+    {
+        var apartment = _repository.Apartment.GetApartment(apartmentId, apartmentTrackChanges);
+        if (apartment is null)
+            throw new ApartmentNotFoundException(apartmentId);
+
+        var addressEntity = _repository.Address.GetAddress(apartmentId, id, addressTrackChanges);
+        if (addressEntity is null)
+            throw new AddressNotFoundException(id);
+
+        var addressToPatch = _mapper.Map<AddressForUpdateDto>(addressEntity);
+
+        return (addressToPatch, addressEntity);
+    }
+
+    public void SaveChangesForPatch(AddressForUpdateDto addressToPatch, Address addressEntity)
+    {
+        _mapper.Map(addressToPatch, addressEntity);
         _repository.Save();
     }
 }
