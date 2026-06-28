@@ -17,6 +17,6 @@ public class MappingProfile : Profile
         CreateMap<AddressForCreationDto, Address>();
         CreateMap<ApartmentForUpdateDto, Apartment>();
         CreateMap<AddressDto, Address>();
-        CreateMap<AddressForUpdateDto, Address>();
+        CreateMap<AddressForUpdateDto, Address>().ReverseMap();
     }
 }
