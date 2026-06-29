@@ -21,9 +21,10 @@ public static class ServiceExtensions
     public static void ConfigureLoggerService(this IServiceCollection services) =>
         services.AddSingleton<ILoggerManager, LoggerManager>();
 
-    public static void ConfigureNpgsqlContext(this IServiceCollection services, IConfiguration configuration) =>
+    public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
       services.AddDbContext<RepositoryContext>(opts =>
-      opts.UseNpgsql(configuration.GetConnectionString("postgresConnection")));
+      opts.UseNpgsql(configuration.GetConnectionString("postgresConnection"),
+          b => b.MigrationsAssembly("RoomRental.Server")).UseSnakeCaseNamingConvention());
 
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
         services.AddScoped<IRepositoryManager, RepositoryManager>();
@@ -31,5 +32,4 @@ public static class ServiceExtensions
     public static void ConfigureServiceManager(this IServiceCollection services) =>
         services.AddScoped<IServiceManager, ServiceManager>();
 
-  
 }

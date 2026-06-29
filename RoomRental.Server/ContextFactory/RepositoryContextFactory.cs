@@ -15,7 +15,7 @@ public class RepositoryContextFactory : IDesignTimeDbContextFactory<RepositoryCo
 
         var builder = new DbContextOptionsBuilder<RepositoryContext>()
                    .UseNpgsql(configuration.GetConnectionString("postgresConnection"),
-                   b => b.MigrationsAssembly("RoomRental.Server"));
+                   b => b.MigrationsAssembly("RoomRental.Server")).UseSnakeCaseNamingConvention();
 
         return new RepositoryContext(builder.Options);
     }

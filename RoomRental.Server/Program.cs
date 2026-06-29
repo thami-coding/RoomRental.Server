@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using NLog;
+using Repository;
 using RoomRental.Server;
 using RoomRental.Server.Extensions;
 
@@ -15,7 +16,7 @@ LogManager.Setup()
 // Add services to the container.
 builder.Services.ConfigureCors();
 builder.Services.ConfigureLoggerService();
-builder.Services.ConfigureNpgsqlContext(builder.Configuration);
+builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -25,7 +26,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<MappingProfile>();
-    cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
+    //cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; local configuration
+    cfg.LicenseKey = File.ReadAllText("/run/secrets/automapper_license").Trim(); //docker configuration
 });
 
 builder.Services.AddControllers(config =>
@@ -40,11 +42,13 @@ var logger = app.Services.GetRequiredService<ILoggerManager>();
 app.ConfigurationExceptionHandler(logger);
 
 if (app.Environment.IsProduction())
+{
     app.UseHsts();
+    app.UseHttpsRedirection();
+}
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
@@ -57,7 +61,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.MigrateDatabase().Run();
 NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
     new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
     .Services.BuildServiceProvider()
