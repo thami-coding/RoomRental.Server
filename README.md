@@ -1,5 +1,7 @@
 # 🏠 RoomRental API
 
+[![.NET](https://github.com/thami-coding/RoomRental.Server/actions/workflows/dotnet.yml/badge.svg)](https://github.com/thami-coding/RoomRental.Server/actions/workflows/dotnet.yml)
+
 ![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-the-badge&logo=dotnet&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-the-badge&logo=docker&logoColor=white)
