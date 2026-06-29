@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RoomRental.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeAddressToDependentEntityAndApartmentToPricipal : Migration
+    public partial class InitialData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,5 +1,8 @@
 <Solution>
   <Project Path="Contracts/Contracts.csproj" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="Entities/Entities.csproj" />
   <Project Path="LoggerService/LoggerService.csproj" />
   <Project Path="Repository/Repository.csproj" />
@@ -8,4 +11,5 @@
   <Project Path="Service.Contracts/Service.Contracts.csproj" />
   <Project Path="Service/Service.csproj" />
   <Project Path="Shared/Shared.csproj" Id="68f4e89a-45e0-4c08-90a0-efc9ff199d4f" />
+  <Project Path="Tests/Tests.csproj" Id="39e2de5b-7a74-40ff-b23f-a2e24bb92a06" />
 </Solution>

@@ -12,8 +12,8 @@ using Repository;
 namespace RoomRental.Server.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20260625043336_ChangeAddressToDependentEntityAndApartmentToPricipal")]
-    partial class ChangeAddressToDependentEntityAndApartmentToPricipal
+    [Migration("20260629183606_InitialData")]
+    partial class InitialData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
