@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore  RoomRental.Server/RoomRental.Server.csproj
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build RoomRental.Server/RoomRental.Server.csproj --no-restore
     - name: Test
       run: dotnet test Tests/Tests.csproj --no-build --verbosity normal
