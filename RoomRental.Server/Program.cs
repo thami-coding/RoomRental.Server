@@ -1,14 +1,18 @@
-using Contracts;
+using NLog;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-using NLog;
-using Repository;
+
 using RoomRental.Server;
 using RoomRental.Server.Extensions;
+using Contracts;
+using Repository;
 
 var builder = WebApplication.CreateBuilder(args);
+var licenseKey = File.Exists("/run/secrets/automapper_license")
+    ? File.ReadAllText("/run/secrets/automapper_license").Trim()
+    : builder.Configuration["AutoMapper:LicenseKey"];
 
 LogManager.Setup()
     .LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
@@ -19,6 +23,7 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureVersioning();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
@@ -26,9 +31,10 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<MappingProfile>();
-    //cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; local configuration
-    cfg.LicenseKey = File.ReadAllText("/run/secrets/automapper_license").Trim(); //docker configuration
+    cfg.LicenseKey = licenseKey;
 });
+builder.Services.ConfigureSwagger();
+
 
 builder.Services.AddControllers(config =>
 {
@@ -44,12 +50,23 @@ app.ConfigurationExceptionHandler(logger);
 if (app.Environment.IsProduction())
 {
     app.UseHsts();
-    app.UseHttpsRedirection();
+
 }
 
+
 // Configure the HTTP request pipeline.
+app.UseSwagger();
+
+app.UseSwaggerUI(s =>
+{
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Rental API v1");
+    //s.SwaggerEndpoint("/swagger/v2/swagger.json", "Room Rental API v2");
+});
+
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
@@ -61,7 +78,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MigrateDatabase().Run();
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    app.MigrateDatabase();
+}
+
+app.Run();
+
 NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
     new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
     .Services.BuildServiceProvider()

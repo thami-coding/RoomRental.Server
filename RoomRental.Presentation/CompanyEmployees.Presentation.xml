@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RoomRental.Presentation</name>
+    </assembly>
+    <members>
+        <member name="M:RoomRental.Presentation.Controllers.AddressesController.GetAddressForApartment(System.Guid,System.Guid)">
+            <summary>
+            Retrieves the address for a specific apartment
+            </summary>
+            <param name="apartmentId">The unique identifier of the apartment</param>
+            <param name="id">The unique identifier of the address</param>
+            <returns>The address associated with the specified apartment</returns>
+            <response code="200">Returns the apartment address</response>
+            <response code="404">Apartment with the provided ID was not found</response>
+        </member>
+        <member name="M:RoomRental.Presentation.Controllers.AddressesController.UpdateAddressForApartment(System.Guid,System.Guid,Shared.DataTransferObjects.AddressForUpdateDto)">
+            <summary>
+            Fully updates the address for a specific apartment
+            </summary>
+            <param name="apartmentId">The unique identifier of the apartment</param>
+            <param name="id">The unique identifier of the address to update</param>
+            <param name="address">The updated address data</param>
+            <returns>No content on success</returns>
+            <response code="204">Address successfully updated</response>
+            <response code="400">Invalid request payload or missing required fields</response>
+            <response code="404">Apartment or address with the provided ID was not found</response>
+        </member>
+        <member name="M:RoomRental.Presentation.Controllers.AddressesController.PartiallyUpdateAddressForApartment(System.Guid,System.Guid,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{Shared.DataTransferObjects.AddressForUpdateDto})">
+            <summary>
+            Partially updates the address for a specific apartment
+            </summary>
+            <param name="apartmentId">The unique identifier of the apartment</param>
+            <param name="id">The unique identifier of the address to update</param>
+            <param name="patchDoc">The JSON Patch document containing the partial update operations</param>
+            <returns>No content on success</returns>
+            <response code="204">Address successfully updated</response>
+            <response code="400">Invalid or null patch document</response>
+            <response code="404">Apartment or address with the provided ID was not found</response>
+        </member>
+        <member name="M:RoomRental.Presentation.Controllers.ApartmentsController.GetApartments">
+            <summary>
+            Retrieves all apartment listings
+            </summary>
+            <returns>A list of all available apartments</returns>
+            <response code="200">Returns the list of apartments</response> 
+        </member>
+        <member name="M:RoomRental.Presentation.Controllers.ApartmentsController.GetApartment(System.Guid)">
+            <summary>
+            Retrieves a specific apartment by ID
+            </summary>
+            <param name="id">The unique identifier of the apartment</param>
+            <returns>A single apartment matching the provided ID</returns>
+            <response code="200">Returns the requested apartment</response>
+            <response code="404">Apartment with the provided ID was not found</response>
+        </member>
+        <member name="M:RoomRental.Presentation.Controllers.ApartmentsController.CreateApartment(Shared.DataTransferObjects.ApartmentForCreationDto)">
+            <summary>
+            Creates a new apartment listing
+            </summary>
+            <param name="apartment">The apartment data to create</param>
+            <returns>The newly created apartment</returns>
+            <response code="201">Apartment successfully created</response>
+            <response code="400">Invalid request payload or missing required fields</response>
+        </member>
+        <member name="M:RoomRental.Presentation.Controllers.ApartmentsController.DeleteApartment(System.Guid)">
+            <summary>
+            Deletes an existing apartment listing
+            </summary>
+            <param name="id">The unique identifier of the apartment to delete</param>
+            <returns>No content on success</returns>
+            <response code="204">Apartment successfully deleted</response>
+            <response code="404">Apartment with the provided ID was not found</response>
+        </member>
+        <member name="M:RoomRental.Presentation.Controllers.ApartmentsController.UpdateApartment(System.Guid,Shared.DataTransferObjects.ApartmentForUpdateDto)">
+            <summary>
+            Fully updates an existing apartment listing
+            </summary>
+            <param name="id">The unique identifier of the apartment to update</param>
+            <param name="apartment">The updated apartment data</param>
+            <returns>No content on success</returns>
+            <response code="204">Apartment successfully updated</response>
+            <response code="400">Invalid request payload or missing required fields</response>
+            <response code="404">Apartment with the provided ID was not found</response>
+        </member>
+    </members>
+</doc>
