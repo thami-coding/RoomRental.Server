@@ -12,7 +12,7 @@ using Repository;
 namespace RoomRental.Server.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20260629183606_InitialData")]
+    [Migration("20260630220706_InitialData")]
     partial class InitialData
     {
         /// <inheritdoc />
@@ -33,26 +33,33 @@ namespace RoomRental.Server.Migrations
                         .HasColumnName("AddressId");
 
                     b.Property<Guid>("ApartmentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("apartment_id");
 
                     b.Property<string>("City")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("city");
 
                     b.Property<string>("Province")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("province");
 
                     b.Property<string>("Street")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("street");
 
                     b.Property<string>("Suburb")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("suburb");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_addresses");
 
                     b.HasIndex("ApartmentId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_addresses_apartment_id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("addresses", (string)null);
 
                     b.HasData(
                         new
@@ -74,20 +81,25 @@ namespace RoomRental.Server.Migrations
                         .HasColumnName("ApartmentId");
 
                     b.Property<int>("AvailableRooms")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("available_rooms");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("price");
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("title");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_apartments");
 
-                    b.ToTable("Apartments");
+                    b.ToTable("apartments", (string)null);
 
                     b.HasData(
                         new
@@ -104,19 +116,24 @@ namespace RoomRental.Server.Migrations
                 {
                     b.Property<Guid>("ImageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("image_id");
 
                     b.Property<Guid>("ApartmentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("apartment_id");
 
                     b.Property<string>("Url")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("url");
 
-                    b.HasKey("ImageId");
+                    b.HasKey("ImageId")
+                        .HasName("pk_images");
 
-                    b.HasIndex("ApartmentId");
+                    b.HasIndex("ApartmentId")
+                        .HasDatabaseName("ix_images_apartment_id");
 
-                    b.ToTable("Images");
+                    b.ToTable("images", (string)null);
 
                     b.HasData(
                         new
@@ -133,7 +150,8 @@ namespace RoomRental.Server.Migrations
                         .WithOne("Address")
                         .HasForeignKey("Entities.Models.Address", "ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_addresses_apartments_apartment_id");
 
                     b.Navigation("Apartment");
                 });
@@ -144,7 +162,8 @@ namespace RoomRental.Server.Migrations
                         .WithMany("Images")
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_images_apartments_apartment_id");
 
                     b.Navigation("Apartment");
                 });
