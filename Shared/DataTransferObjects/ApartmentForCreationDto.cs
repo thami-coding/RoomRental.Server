@@ -1,10 +1,5 @@
-﻿namespace Shared.DataTransferObjects;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class ApartmentForCreationDto
-{
-    public string? Title { get; set; }
-    public int AvailableRooms { get; set; }
-    public string? Description { get; set; }
-    public AddressForCreationDto? Address { get; set; }
-    public ICollection<ImageDto> Images { get; set; } = new List<ImageDto>();
-}
+namespace Shared.DataTransferObjects;
+
+public class ApartmentForCreationDto : ApartmentForManipulationDto { }

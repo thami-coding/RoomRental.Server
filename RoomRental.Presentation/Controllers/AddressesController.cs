@@ -56,6 +56,8 @@ public class AddressesController : ControllerBase
     {
         if (address is null)
             return BadRequest("ApartmentForUpdateDto object is null");
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
 
         _service.AddressService.UpdateAddressForApartment(apartmentId, id, address, apartmentTrackChanges: false,
             addresssTrackChanges: true);
@@ -87,7 +89,12 @@ public class AddressesController : ControllerBase
         var result = _service.AddressService.GetAddressForPatch(apartmentId, id, apartmentTrackChanges: false,
             addressTrackChanges: true);
 
-        patchDoc.ApplyTo(result.addressToPatch);
+        patchDoc.ApplyTo(result.addressToPatch, ModelState);
+
+        TryValidateModel(result.addressToPatch);
+
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
 
         _service.AddressService.SaveChangesForPatch(result.addressToPatch, result.addressEntity);
 
