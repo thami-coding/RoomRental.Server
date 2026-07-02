@@ -7,7 +7,7 @@ using Shared.DataTransferObjects;
 namespace RoomRental.Presentation.Controllers;
 
 [Produces("application/json")]
-[ApiVersion("1.0", Deprecated =true)]
+[ApiVersion("1.0", Deprecated = true)]
 [Route("api/apartments")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "v1")]
@@ -54,11 +54,14 @@ public class ApartmentsController : ControllerBase
     /// <response code="400">Invalid request payload or missing required fields</response>
     [HttpPost]
     [ProducesResponseType(typeof(ApartmentDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(400)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult CreateApartment([FromBody] ApartmentForCreationDto apartment)
     {
         if (apartment is null)
             return BadRequest("ApartmentForCreation object is null");
+
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
 
         var createdAparment = _service.ApartmentService.CreateApartment(apartment);
 
@@ -98,6 +101,9 @@ public class ApartmentsController : ControllerBase
     {
         if (apartment is null)
             return BadRequest("ApartmentForUpdateDto object is null");
+
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
 
         _service.ApartmentService.UpdateApartment(id, apartment, trackChanges: true);
         return NoContent();
