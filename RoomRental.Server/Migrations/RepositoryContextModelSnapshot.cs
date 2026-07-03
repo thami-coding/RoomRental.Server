@@ -35,26 +35,26 @@ namespace RoomRental.Server.Migrations
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("character varying(60)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("city");
 
                     b.Property<string>("Province")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("character varying(60)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("province");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("character varying(60)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("street");
 
                     b.Property<string>("Suburb")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("character varying(60)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("suburb");
 
                     b.HasKey("Id")
@@ -91,8 +91,8 @@ namespace RoomRental.Server.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)")
+                        .HasMaxLength(350)
+                        .HasColumnType("character varying(350)")
                         .HasColumnName("description");
 
                     b.Property<decimal>("Price")
@@ -101,7 +101,8 @@ namespace RoomRental.Server.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("title");
 
                     b.HasKey("Id")
