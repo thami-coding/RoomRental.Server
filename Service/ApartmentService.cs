@@ -20,17 +20,17 @@ internal sealed class ApartmentService : IApartmentService
         _mapper = mapper;
     }
 
-    public IEnumerable<ApartmentsDto> GetAllApartments(bool trackChanges)
+    public async Task<IEnumerable<ApartmentsDto>> GetAllApartmentsAsync(bool trackChanges)
     {
-        var apartments = _repository.Apartment.GetAllApartments(trackChanges);
+        var apartments = await _repository.Apartment.GetAllApartmentsAsync(trackChanges);
         var aprtmentsDto = _mapper.Map<IEnumerable<ApartmentsDto>>(apartments);
 
         return aprtmentsDto;
     }
 
-    public ApartmentDto GetApartment(Guid id, bool trackChanges)
+    public async Task<ApartmentDto> GetApartmentAsync(Guid id, bool trackChanges)
     {
-        var apartment = _repository.Apartment.GetApartment(id, trackChanges);
+        var apartment = await _repository.Apartment.GetApartmentAsync(id, trackChanges);
         if (apartment is null)
             throw new ApartmentNotFoundException(id);
 
@@ -38,35 +38,35 @@ internal sealed class ApartmentService : IApartmentService
         return apartmentDto;
     }
 
-    public ApartmentDto CreateApartment(ApartmentForCreationDto apartment)
+    public async Task<ApartmentDto> CreateApartmentAsync(ApartmentForCreationDto apartment)
     {
         var apartmentEntity = _mapper.Map<Apartment>(apartment);
 
         _repository.Apartment.CreateApartment(apartmentEntity);
-        _repository.Save();
+        await _repository.SaveAsync();
 
         var apartmentToReturn = _mapper.Map<ApartmentDto>(apartmentEntity);
 
         return apartmentToReturn;
     }
 
-    public void DeleteApartment(Guid apartmentId, bool trackChanges)
+    public async Task DeleteApartmentAsync(Guid apartmentId, bool trackChanges)
     {
-        var apartment = _repository.Apartment.GetApartment(apartmentId, trackChanges);
+        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, trackChanges);
         if (apartment is null)
             throw new ApartmentNotFoundException(apartmentId);
 
         _repository.Apartment.DeleteApartment(apartment);
-        _repository.Save();
+        await _repository.SaveAsync();
     }
 
-    public void UpdateApartment(Guid apartmentId, ApartmentForUpdateDto apartmentForUpdate, bool trackChanges)
+    public async Task UpdateApartmentAsync(Guid apartmentId, ApartmentForUpdateDto apartmentForUpdate, bool trackChanges)
     {
-        var apartmentEntity = _repository.Apartment.GetApartment(apartmentId,trackChanges);
+        var apartmentEntity = await _repository.Apartment.GetApartmentAsync(apartmentId,trackChanges);
         if (apartmentEntity is null)
             throw new ApartmentNotFoundException(apartmentId);
 
         _mapper.Map(apartmentForUpdate, apartmentEntity);
-        _repository.Save();
+        await _repository.SaveAsync();
     }
 }

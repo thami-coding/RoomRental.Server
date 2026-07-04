@@ -31,9 +31,9 @@ public class AddressesController : ControllerBase
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(AddressDto), StatusCodes.Status201Created)]
     [ProducesResponseType(404)]
-    public IActionResult GetAddressForApartment(Guid apartmentId, Guid id)
+    public async Task<IActionResult> GetAddressForApartment(Guid apartmentId, Guid id)
     {
-        var address = _service.AddressService.GetAddress(apartmentId, id, trackChanges: false);
+        var address = await _service.AddressService.GetAddressAsync(apartmentId, id, trackChanges: false);
         return Ok(address);
     }
 
@@ -52,14 +52,14 @@ public class AddressesController : ControllerBase
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(404)]
-    public IActionResult UpdateAddressForApartment(Guid apartmentId, Guid id, [FromBody] AddressForUpdateDto address)
+    public async Task<IActionResult> UpdateAddressForApartment(Guid apartmentId, Guid id, [FromBody] AddressForUpdateDto address)
     {
         if (address is null)
             return BadRequest("ApartmentForUpdateDto object is null");
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
-        _service.AddressService.UpdateAddressForApartment(apartmentId, id, address, apartmentTrackChanges: false,
+        await _service.AddressService.UpdateAddressForApartmentAsync(apartmentId, id, address, apartmentTrackChanges: false,
             addresssTrackChanges: true);
 
         return NoContent();
@@ -80,13 +80,13 @@ public class AddressesController : ControllerBase
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(404)]
-    public IActionResult PartiallyUpdateAddressForApartment(Guid apartmentId, Guid id,
+    public async Task<IActionResult> PartiallyUpdateAddressForApartment(Guid apartmentId, Guid id,
         [FromBody] JsonPatchDocument<AddressForUpdateDto> patchDoc)
     {
         if (patchDoc is null)
             return BadRequest("patchDoc object sent from client is null.");
 
-        var result = _service.AddressService.GetAddressForPatch(apartmentId, id, apartmentTrackChanges: false,
+        var result = await _service.AddressService.GetAddressForPatchAsync(apartmentId, id, apartmentTrackChanges: false,
             addressTrackChanges: true);
 
         patchDoc.ApplyTo(result.addressToPatch, ModelState);
@@ -96,7 +96,7 @@ public class AddressesController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
-        _service.AddressService.SaveChangesForPatch(result.addressToPatch, result.addressEntity);
+        await _service.AddressService.SaveChangesForPatchAsync(result.addressToPatch, result.addressEntity);
 
         return NoContent();
 

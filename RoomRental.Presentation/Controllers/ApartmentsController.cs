@@ -23,9 +23,9 @@ public class ApartmentsController : ControllerBase
     /// <response code="200">Returns the list of apartments</response> 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ApartmentDto>), StatusCodes.Status201Created)]
-    public IActionResult GetApartments()
+    public async Task<IActionResult> GetApartments()
     {
-        var apartments = _service.ApartmentService.GetAllApartments(trackChanges: false);
+        var apartments = await _service.ApartmentService.GetAllApartmentsAsync(trackChanges: false);
         return Ok(apartments);
     }
 
@@ -39,9 +39,9 @@ public class ApartmentsController : ControllerBase
     [HttpGet("{id:guid}", Name = "ApartmentById")]
     [ProducesResponseType(typeof(ApartmentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(404)]
-    public IActionResult GetApartment(Guid id)
+    public async Task<IActionResult> GetApartment(Guid id)
     {
-        var apartment = _service.ApartmentService.GetApartment(id, trackChanges: false);
+        var apartment = await _service.ApartmentService.GetApartmentAsync(id, trackChanges: false);
         return Ok(apartment);
     }
 
@@ -55,7 +55,7 @@ public class ApartmentsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(ApartmentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateApartment([FromBody] ApartmentForCreationDto apartment)
+    public async Task<IActionResult> CreateApartment([FromBody] ApartmentForCreationDto apartment)
     {
         if (apartment is null)
             return BadRequest("ApartmentForCreation object is null");
@@ -63,7 +63,7 @@ public class ApartmentsController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
-        var createdAparment = _service.ApartmentService.CreateApartment(apartment);
+        var createdAparment = await _service.ApartmentService.CreateApartmentAsync(apartment);
 
         return CreatedAtRoute("ApartmentById", new { id = createdAparment.Id }, createdAparment);
     }
@@ -78,9 +78,9 @@ public class ApartmentsController : ControllerBase
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
-    public IActionResult DeleteApartment(Guid id)
+    public async Task<IActionResult> DeleteApartment(Guid id)
     {
-        _service.ApartmentService.DeleteApartment(id, trackChanges: false);
+        await _service.ApartmentService.DeleteApartmentAsync(id, trackChanges: false);
         return NoContent();
     }
 
@@ -97,7 +97,7 @@ public class ApartmentsController : ControllerBase
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
-    public IActionResult UpdateApartment(Guid id, [FromBody] ApartmentForUpdateDto apartment)
+    public async Task<IActionResult> UpdateApartment(Guid id, [FromBody] ApartmentForUpdateDto apartment)
     {
         if (apartment is null)
             return BadRequest("ApartmentForUpdateDto object is null");
@@ -105,7 +105,7 @@ public class ApartmentsController : ControllerBase
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
-        _service.ApartmentService.UpdateApartment(id, apartment, trackChanges: true);
+        await _service.ApartmentService.UpdateApartmentAsync(id, apartment, trackChanges: true);
         return NoContent();
     }
 }

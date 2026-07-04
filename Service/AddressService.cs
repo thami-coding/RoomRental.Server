@@ -21,13 +21,13 @@ internal sealed class AddressService : IAddressService
         _mapper = mapper;
     }
 
-    public AddressDto GetAddress(Guid addressId, Guid id, bool trackChanges)
+    public async Task<AddressDto> GetAddressAsync(Guid addressId, Guid id, bool trackChanges)
     {
-        var apartment = _repository.Apartment.GetApartment(addressId, trackChanges);
+        var apartment = await _repository.Apartment.GetApartmentAsync(addressId, trackChanges);
         if (apartment is null)
             throw new ApartmentNotFoundException(addressId);
 
-        var addressDb = _repository.Address.GetAddress(addressId, id, trackChanges);
+        var addressDb = await _repository.Address.GetAddressAsync(addressId, id, trackChanges);
         if (addressDb is null)
             throw new AddressNotFoundException(id);
 
@@ -35,42 +35,42 @@ internal sealed class AddressService : IAddressService
         return address;
     }
 
-    public void DeleteAddressForApartment(Guid apartmentId, Guid id, bool trackChanges)
+    public async Task  DeleteAddressForApartmentAsync(Guid apartmentId, Guid id, bool trackChanges)
     {
-        var apartment = _repository.Apartment.GetApartment(apartmentId, trackChanges);
+        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, trackChanges);
         if (apartment is null)
             throw new ApartmentNotFoundException(apartmentId);
 
-        var addressForApartment = _repository.Address.GetAddress(apartmentId, id, trackChanges);
+        var addressForApartment = await _repository.Address.GetAddressAsync(apartmentId, id, trackChanges);
         if (addressForApartment is null)
             throw new AddressNotFoundException(id);
 
         _repository.Address.DeleteAddress(addressForApartment);
-        _repository.Save();
+        await _repository.SaveAsync();
 
     }
 
-    public void UpdateAddressForApartment(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate, bool apartmentTrackChanges, bool addressTrackChanges)
+    public async Task  UpdateAddressForApartmentAsync(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate, bool apartmentTrackChanges, bool addressTrackChanges)
     {
-        var apartment = _repository.Apartment.GetApartment(apartmentId, apartmentTrackChanges);
+        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, apartmentTrackChanges);
         if (apartment is null)
             throw new ApartmentNotFoundException(apartmentId);
 
-        var addressEntity = _repository.Address.GetAddress(apartmentId, id, addressTrackChanges);
+        var addressEntity = await _repository.Address.GetAddressAsync(apartmentId, id, addressTrackChanges);
         if (addressEntity is null)
             throw new AddressNotFoundException(id);
 
         _mapper.Map(addressForUpdate, addressEntity);
-        _repository.Save();
+        await _repository.SaveAsync();
     }
 
-    public (AddressForUpdateDto addressToPatch, Address addressEntity) GetAddressForPatch(Guid apartmentId, Guid id, bool apartmentTrackChanges, bool addressTrackChanges)
+    public async Task<(AddressForUpdateDto addressToPatch, Address addressEntity)> GetAddressForPatchAsync(Guid apartmentId, Guid id, bool apartmentTrackChanges, bool addressTrackChanges)
     {
-        var apartment = _repository.Apartment.GetApartment(apartmentId, apartmentTrackChanges);
+        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, apartmentTrackChanges);
         if (apartment is null)
             throw new ApartmentNotFoundException(apartmentId);
 
-        var addressEntity = _repository.Address.GetAddress(apartmentId, id, addressTrackChanges);
+        var addressEntity = await _repository.Address.GetAddressAsync(apartmentId, id, addressTrackChanges);
         if (addressEntity is null)
             throw new AddressNotFoundException(id);
 
@@ -79,9 +79,9 @@ internal sealed class AddressService : IAddressService
         return (addressToPatch, addressEntity);
     }
 
-    public void SaveChangesForPatch(AddressForUpdateDto addressToPatch, Address addressEntity)
+    public async Task SaveChangesForPatchAsync(AddressForUpdateDto addressToPatch, Address addressEntity)
     {
         _mapper.Map(addressToPatch, addressEntity);
-        _repository.Save();
+        await _repository.SaveAsync();
     }
 }
