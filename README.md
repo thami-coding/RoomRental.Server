@@ -13,6 +13,9 @@
 > A RESTful API for managing apartment rental listings built with **.NET 10**, **Onion Architecture**, and **PostgreSQL**.
 > This project is still in development so not all features are working.
 
+<img width="1346" height="594" alt="image" src="https://github.com/user-attachments/assets/1cfd552b-81ec-4a5a-beb4-b82bd3a4ed14" />
+
+
 ---
 
 ## 📋 Table of Contents
