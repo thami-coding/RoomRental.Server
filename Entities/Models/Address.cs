@@ -9,19 +9,19 @@ public class Address
     public Guid Id { get; set; }
 
     [Required(ErrorMessage = "Street is a required field.")]
-    [MaxLength(60, ErrorMessage = "Maximum length for the Street is 60 characters.")]
+    [MaxLength(150, ErrorMessage = "Maximum length for the Street is 150 characters.")]
     public string? Street { get; set; }
 
     [Required(ErrorMessage = "Province is a required field.")]
-    [MaxLength(60, ErrorMessage = "Maximum length for the Province is 60 characters.")]
+    [MaxLength(150, ErrorMessage = "Maximum length for the Province is 150 characters.")]
     public string? Province { get; set; }
 
     [Required(ErrorMessage = "City is a required field.")]
-    [MaxLength(60, ErrorMessage = "Maximum length for the City is 60 characters.")]
+    [MaxLength(150, ErrorMessage = "Maximum length for the City is 150 characters.")]
     public string? City { get; set; }
 
     [Required(ErrorMessage = "Suburb is a required field.")]
-    [MaxLength(60, ErrorMessage = "Maximum length for the Suburb is 60 characters.")]
+    [MaxLength(150, ErrorMessage = "Maximum length for the Suburb is 150 characters.")]
     public string? Suburb { get; set; }
 
     [ForeignKey(nameof(Apartment))]

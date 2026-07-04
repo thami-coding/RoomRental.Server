@@ -16,7 +16,8 @@ public sealed class RepositoryManager : IRepositoryManager
     }
 
     public IApartmentRepository Apartment => _apartmentRepository.Value;
+
     public IAddressRepository Address => _addressRepository.Value;
 
-    public void Save() => _repositoryContext.SaveChanges();
+    public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
 }

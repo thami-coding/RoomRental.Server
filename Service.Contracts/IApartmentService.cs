@@ -4,9 +4,9 @@ namespace Service.Contracts;
 
 public interface IApartmentService
 {
-    IEnumerable<ApartmentsDto> GetAllApartments(bool trackChanges);
-    ApartmentDto GetApartment(Guid apartmentId, bool trackChanges);
-    ApartmentDto CreateApartment(ApartmentForCreationDto apartment);
-    void DeleteApartment(Guid apartmentId, bool trackChanges);
-    void UpdateApartment(Guid apartmentId, ApartmentForUpdateDto apartmentForUpdateDto, bool trackChanges);
+    Task<IEnumerable<ApartmentsDto>> GetAllApartmentsAsync(bool trackChanges);
+    Task<ApartmentDto> GetApartmentAsync(Guid apartmentId, bool trackChanges);
+    Task<ApartmentDto> CreateApartmentAsync(ApartmentForCreationDto apartment);
+    Task DeleteApartmentAsync(Guid apartmentId, bool trackChanges);
+    Task UpdateApartmentAsync(Guid apartmentId, ApartmentForUpdateDto apartmentForUpdateDto, bool trackChanges);
 }

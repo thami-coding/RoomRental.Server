@@ -6,14 +6,14 @@ namespace Service.Contracts;
 
 public interface IAddressService
 {
-    AddressDto GetAddress(Guid addressId, Guid id, bool trackChanges);
-    void DeleteAddressForApartment(Guid apartmentId, Guid id, bool trackChanges);
-    void UpdateAddressForApartment(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate,
+    Task<AddressDto> GetAddressAsync(Guid addressId, Guid id, bool trackChanges);
+    Task DeleteAddressForApartmentAsync(Guid apartmentId, Guid id, bool trackChanges);
+    Task UpdateAddressForApartmentAsync(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate,
         bool apartmentTrackChanges, bool addresssTrackChanges);
 
-    (AddressForUpdateDto addressToPatch, Address addressEntity) GetAddressForPatch(
+    Task<(AddressForUpdateDto addressToPatch, Address addressEntity)> GetAddressForPatchAsync(
         Guid apartmentId, Guid id, bool apartmentTrackChanges, bool addressTrackChanges);
 
-    void SaveChangesForPatch(AddressForUpdateDto addressToPatch, Address addressEntity);
+    Task SaveChangesForPatchAsync(AddressForUpdateDto addressToPatch, Address addressEntity);
 
 }

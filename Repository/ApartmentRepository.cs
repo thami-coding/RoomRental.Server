@@ -11,17 +11,17 @@ public class ApartmentRepository : RepositoryBase<Apartment>, IApartmentReposito
 
     public void CreateApartment(Apartment apartment) => Create(apartment);
 
-    public IEnumerable<Apartment> GetAllApartments(bool trackChanges) =>
-        FindAll(trackChanges).Include(a => a.Address)
+    public async Task<IEnumerable<Apartment>> GetAllApartmentsAsync(bool trackChanges) =>
+       await FindAll(trackChanges).Include(a => a.Address)
         .Include(a => a.Images)
         .OrderBy(apartment => apartment.AvailableRooms)
-        .ToList();
+        .ToListAsync();
 
-    public Apartment GetApartment(Guid apartmentId, bool trackChanges) =>
-        FindByCondition(a => a.Id.Equals(apartmentId), trackChanges)
+    public async Task<Apartment> GetApartmentAsync(Guid apartmentId, bool trackChanges) =>
+        await FindByCondition(a => a.Id.Equals(apartmentId), trackChanges)
         .Include(a => a.Address)
         .Include(a => a.Images)
-        .SingleOrDefault();
+        .SingleOrDefaultAsync();
 
     public void DeleteApartment(Apartment apartment) => Delete(apartment);
 
