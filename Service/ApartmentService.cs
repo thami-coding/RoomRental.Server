@@ -30,9 +30,7 @@ internal sealed class ApartmentService : IApartmentService
 
     public async Task<ApartmentDto> GetApartmentAsync(Guid id, bool trackChanges)
     {
-        var apartment = await _repository.Apartment.GetApartmentAsync(id, trackChanges);
-        if (apartment is null)
-            throw new ApartmentNotFoundException(id);
+        var apartment = await GetApartmentAndCheckIfItExists(id, trackChanges);
 
         var apartmentDto = _mapper.Map<ApartmentDto>(apartment);
         return apartmentDto;
@@ -52,9 +50,7 @@ internal sealed class ApartmentService : IApartmentService
 
     public async Task DeleteApartmentAsync(Guid apartmentId, bool trackChanges)
     {
-        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, trackChanges);
-        if (apartment is null)
-            throw new ApartmentNotFoundException(apartmentId);
+        var apartment = await GetApartmentAndCheckIfItExists(apartmentId, trackChanges);
 
         _repository.Apartment.DeleteApartment(apartment);
         await _repository.SaveAsync();
@@ -62,11 +58,17 @@ internal sealed class ApartmentService : IApartmentService
 
     public async Task UpdateApartmentAsync(Guid apartmentId, ApartmentForUpdateDto apartmentForUpdate, bool trackChanges)
     {
-        var apartmentEntity = await _repository.Apartment.GetApartmentAsync(apartmentId,trackChanges);
-        if (apartmentEntity is null)
-            throw new ApartmentNotFoundException(apartmentId);
+        var apartment = await GetApartmentAndCheckIfItExists(apartmentId, trackChanges);
 
-        _mapper.Map(apartmentForUpdate, apartmentEntity);
+        _mapper.Map(apartmentForUpdate, apartment);
         await _repository.SaveAsync();
+    }
+
+    private async Task<Apartment> GetApartmentAndCheckIfItExists(Guid id, bool trackChanges)
+    {
+        var apartment = await _repository.Apartment.GetApartmentAsync(id, trackChanges);
+        if (apartment is null)
+            throw new ApartmentNotFoundException(id);
+        return apartment;
     }
 }
