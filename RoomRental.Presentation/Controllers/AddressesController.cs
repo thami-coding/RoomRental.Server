@@ -3,6 +3,7 @@ using Entities.ErrorModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using RoomRental.Presentation.ActionFilters;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -52,13 +53,9 @@ public class AddressesController : ControllerBase
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(404)]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdateAddressForApartment(Guid apartmentId, Guid id, [FromBody] AddressForUpdateDto address)
     {
-        if (address is null)
-            return BadRequest("ApartmentForUpdateDto object is null");
-        if (!ModelState.IsValid)
-            return UnprocessableEntity(ModelState);
-
         await _service.AddressService.UpdateAddressForApartmentAsync(apartmentId, id, address, apartmentTrackChanges: false,
             addresssTrackChanges: true);
 

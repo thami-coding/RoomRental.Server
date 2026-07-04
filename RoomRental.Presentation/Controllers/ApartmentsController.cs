@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RoomRental.Presentation.ActionFilters;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -55,14 +56,9 @@ public class ApartmentsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(ApartmentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateApartment([FromBody] ApartmentForCreationDto apartment)
     {
-        if (apartment is null)
-            return BadRequest("ApartmentForCreation object is null");
-
-        if (!ModelState.IsValid)
-            return UnprocessableEntity(ModelState);
-
         var createdAparment = await _service.ApartmentService.CreateApartmentAsync(apartment);
 
         return CreatedAtRoute("ApartmentById", new { id = createdAparment.Id }, createdAparment);
@@ -81,6 +77,7 @@ public class ApartmentsController : ControllerBase
     public async Task<IActionResult> DeleteApartment(Guid id)
     {
         await _service.ApartmentService.DeleteApartmentAsync(id, trackChanges: false);
+
         return NoContent();
     }
 
@@ -97,15 +94,11 @@ public class ApartmentsController : ControllerBase
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdateApartment(Guid id, [FromBody] ApartmentForUpdateDto apartment)
     {
-        if (apartment is null)
-            return BadRequest("ApartmentForUpdateDto object is null");
-
-        if (!ModelState.IsValid)
-            return UnprocessableEntity(ModelState);
-
         await _service.ApartmentService.UpdateApartmentAsync(id, apartment, trackChanges: true);
+
         return NoContent();
     }
 }
