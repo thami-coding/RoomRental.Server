@@ -1,5 +1,3 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Shared.DataTransferObjects;
+﻿namespace Shared.DataTransferObjects;
 
 public class ApartmentForCreationDto : ApartmentForManipulationDto { }

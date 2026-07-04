@@ -21,44 +21,33 @@ internal sealed class AddressService : IAddressService
         _mapper = mapper;
     }
 
-    public async Task<AddressDto> GetAddressAsync(Guid addressId, Guid id, bool trackChanges)
+    public async Task<AddressDto> GetAddressAsync(Guid apartmentId, Guid id, bool trackChanges)
     {
-        var apartment = await _repository.Apartment.GetApartmentAsync(addressId, trackChanges);
-        if (apartment is null)
-            throw new ApartmentNotFoundException(addressId);
+        await CheckIfApartmentExists(apartmentId, trackChanges);
 
-        var addressDb = await _repository.Address.GetAddressAsync(addressId, id, trackChanges);
-        if (addressDb is null)
-            throw new AddressNotFoundException(id);
+        var addressDb = await GetAddressForApartmentAndCheckIfItExists(apartmentId, id, trackChanges);
 
         var address = _mapper.Map<AddressDto>(addressDb);
         return address;
     }
 
-    public async Task  DeleteAddressForApartmentAsync(Guid apartmentId, Guid id, bool trackChanges)
+    public async Task DeleteAddressForApartmentAsync(Guid apartmentId, Guid id, bool trackChanges)
     {
-        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, trackChanges);
-        if (apartment is null)
-            throw new ApartmentNotFoundException(apartmentId);
+        await CheckIfApartmentExists(apartmentId, trackChanges);
 
-        var addressForApartment = await _repository.Address.GetAddressAsync(apartmentId, id, trackChanges);
-        if (addressForApartment is null)
-            throw new AddressNotFoundException(id);
+        var addressDb = await GetAddressForApartmentAndCheckIfItExists(apartmentId, id, trackChanges);
 
-        _repository.Address.DeleteAddress(addressForApartment);
+        _repository.Address.DeleteAddress(addressDb);
         await _repository.SaveAsync();
 
     }
 
-    public async Task  UpdateAddressForApartmentAsync(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate, bool apartmentTrackChanges, bool addressTrackChanges)
+    public async Task UpdateAddressForApartmentAsync(Guid apartmentId, Guid id, AddressForUpdateDto addressForUpdate, bool apartmentTrackChanges, bool addressTrackChanges)
     {
         var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, apartmentTrackChanges);
-        if (apartment is null)
-            throw new ApartmentNotFoundException(apartmentId);
+        await CheckIfApartmentExists(apartmentId, apartmentTrackChanges);
 
-        var addressEntity = await _repository.Address.GetAddressAsync(apartmentId, id, addressTrackChanges);
-        if (addressEntity is null)
-            throw new AddressNotFoundException(id);
+        var addressEntity = await GetAddressForApartmentAndCheckIfItExists(apartmentId, id, addressTrackChanges);
 
         _mapper.Map(addressForUpdate, addressEntity);
         await _repository.SaveAsync();
@@ -66,22 +55,38 @@ internal sealed class AddressService : IAddressService
 
     public async Task<(AddressForUpdateDto addressToPatch, Address addressEntity)> GetAddressForPatchAsync(Guid apartmentId, Guid id, bool apartmentTrackChanges, bool addressTrackChanges)
     {
-        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, apartmentTrackChanges);
-        if (apartment is null)
-            throw new ApartmentNotFoundException(apartmentId);
+        await CheckIfApartmentExists(apartmentId, apartmentTrackChanges);
 
-        var addressEntity = await _repository.Address.GetAddressAsync(apartmentId, id, addressTrackChanges);
-        if (addressEntity is null)
-            throw new AddressNotFoundException(id);
+        var addressDb = await GetAddressForApartmentAndCheckIfItExists(apartmentId, id, addressTrackChanges);
 
-        var addressToPatch = _mapper.Map<AddressForUpdateDto>(addressEntity);
+        var addressToPatch = _mapper.Map<AddressForUpdateDto>(addressDb);
 
-        return (addressToPatch, addressEntity);
+        return (addressToPatch, addressDb);
     }
 
     public async Task SaveChangesForPatchAsync(AddressForUpdateDto addressToPatch, Address addressEntity)
     {
         _mapper.Map(addressToPatch, addressEntity);
         await _repository.SaveAsync();
+    }
+
+    private async Task CheckIfApartmentExists(Guid apartmentId, bool trackChanges)
+    {
+        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, trackChanges);
+        if (apartment is null)
+            throw new ApartmentNotFoundException(apartmentId);
+    }
+
+    private async Task<Address> GetAddressForApartmentAndCheckIfItExists(Guid apartmentId, Guid id, bool trackChanges)
+    {
+        var apartment = await _repository.Apartment.GetApartmentAsync(apartmentId, trackChanges);
+        if (apartment is null)
+            throw new ApartmentNotFoundException(apartmentId);
+
+        var addressDb = await _repository.Address.GetAddressAsync(apartmentId, id, trackChanges);
+        if (addressDb is null)
+            throw new AddressNotFoundException(id);
+
+        return addressDb;
     }
 }

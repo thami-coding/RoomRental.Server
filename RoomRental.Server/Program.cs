@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 
-using RoomRental.Server;
-using RoomRental.Server.Extensions;
 using Contracts;
 using Repository;
+using RoomRental.Presentation.ActionFilters;
+using RoomRental.Server;
+using RoomRental.Server.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var licenseKey = File.Exists("/run/secrets/automapper_license")
@@ -34,7 +35,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.LicenseKey = licenseKey;
 });
 builder.Services.ConfigureSwagger();
-
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 builder.Services.AddControllers(config =>
 {
