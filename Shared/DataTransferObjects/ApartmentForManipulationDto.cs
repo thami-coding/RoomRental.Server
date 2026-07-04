@@ -7,7 +7,7 @@ namespace Shared.DataTransferObjects;
 public abstract class ApartmentForManipulationDto
 {
     [Required(ErrorMessage = "Title name is a required field.")]
-    [MaxLength(150, ErrorMessage = "Maximum length for the Title is `50 characters.")]
+    [MaxLength(150, ErrorMessage = "Maximum length for the Title is 150 characters.")]
     public string? Title { get; set; }
 
     [Required(ErrorMessage = "AvailableRooms is a required field.")]
