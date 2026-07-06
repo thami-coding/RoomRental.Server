@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 .env
 automapper_license.txt
+jwt_secret.txt
