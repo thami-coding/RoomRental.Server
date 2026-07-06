@@ -79,7 +79,8 @@ public class AuthenticationService : IAuthenticationService
 
     private SigningCredentials GetSigningCredentials()
     {
-        var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET"));
+        var secretKey = GetSecretKey();
+        var key = Encoding.UTF8.GetBytes(secretKey);
         var secret = new SymmetricSecurityKey(key);
 
         return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
@@ -130,14 +131,14 @@ public class AuthenticationService : IAuthenticationService
     private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
         var jwtSettings = _configuration.GetSection("jwtSettings");
-
+        var secretKey = GetSecretKey();
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = true,
             ValidateIssuer = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET"))),
+                Encoding.UTF8.GetBytes(secretKey)),
             ValidateLifetime = true,
             ValidIssuer = jwtSettings["validIssuer"],
             ValidAudience = jwtSettings["validAudience"]
@@ -168,4 +169,13 @@ public class AuthenticationService : IAuthenticationService
         return await CreateToken(populateExp: false);
     }
 
+    private string? GetSecretKey()
+    {
+        var jwtSettings = _configuration.GetSection("JwtSettings");
+        var secretKey = File.Exists("/run/secrets/jwt_secret") ?
+            File.ReadAllText("/run/secrets/jwt_secret").Trim()
+            : jwtSettings["secretKey"];
+
+        return secretKey;
+    }
 }

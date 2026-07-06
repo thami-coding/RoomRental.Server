@@ -100,9 +100,11 @@ public static class ServiceExtensions
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection("JwtSettings");
-        var secretKey = Environment.GetEnvironmentVariable("SECRET");
+        var secretKey = File.Exists("/run/secrets/jwt_secret") ?
+            File.ReadAllText("/run/secrets/jwt_secret").Trim()
+            : jwtSettings["secretKey"];
 
-        services.AddAuthentication(opt =>
+    services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

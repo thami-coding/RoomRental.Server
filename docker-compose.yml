@@ -26,9 +26,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+      - JwtSettings__validIssuer=${JWT_ISSUER}
+      - JwtSettings__validAudience=${JWT_AUDIENCE}
+      - JwtSettings__expires=${JWT_EXPIRES}
       - ConnectionStrings__postgresConnection=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     secrets:
       - automapper_license
+      - jwt_secret 
     depends_on:
       db:
         condition: service_healthy
@@ -36,6 +40,8 @@ services:
 secrets:
   automapper_license:
     file: ./automapper_license.txt
+  jwt_secret:
+    file: ./jwt_secret.txt
 
 volumes:
   postgres_data:
