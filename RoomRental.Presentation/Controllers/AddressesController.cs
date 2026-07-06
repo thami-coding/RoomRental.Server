@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Entities.ErrorModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,7 @@ public class AddressesController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(404)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> UpdateAddressForApartment(Guid apartmentId, Guid id, [FromBody] AddressForUpdateDto address)
     {
         await _service.AddressService.UpdateAddressForApartmentAsync(apartmentId, id, address, apartmentTrackChanges: false,
@@ -77,6 +79,7 @@ public class AddressesController : ControllerBase
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(404)]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> PartiallyUpdateAddressForApartment(Guid apartmentId, Guid id,
         [FromBody] JsonPatchDocument<AddressForUpdateDto> patchDoc)
     {

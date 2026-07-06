@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoomRental.Presentation.ActionFilters;
@@ -8,7 +9,7 @@ using Shared.DataTransferObjects;
 namespace RoomRental.Presentation.Controllers;
 
 [Produces("application/json")]
-[ApiVersion("1.0", Deprecated = true)]
+[ApiVersion("1.0")]
 [Route("api/apartments")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "v1")]
@@ -57,6 +58,7 @@ public class ApartmentsController : ControllerBase
     [ProducesResponseType(typeof(ApartmentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [Authorize(Roles ="Manager")]
     public async Task<IActionResult> CreateApartment([FromBody] ApartmentForCreationDto apartment)
     {
         var createdAparment = await _service.ApartmentService.CreateApartmentAsync(apartment);
@@ -74,6 +76,7 @@ public class ApartmentsController : ControllerBase
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> DeleteApartment(Guid id)
     {
         await _service.ApartmentService.DeleteApartmentAsync(id, trackChanges: false);
@@ -95,6 +98,7 @@ public class ApartmentsController : ControllerBase
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> UpdateApartment(Guid id, [FromBody] ApartmentForUpdateDto apartment)
     {
         await _service.ApartmentService.UpdateApartmentAsync(id, apartment, trackChanges: true);
