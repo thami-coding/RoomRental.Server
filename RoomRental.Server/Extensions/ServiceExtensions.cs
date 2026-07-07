@@ -1,17 +1,18 @@
 ﻿using Asp.Versioning;
-using Microsoft.OpenApi;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
 using Contracts;
+using Entities.Models;
 using LoggerService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using Repository;
 using Service;
 using Service.Contracts;
-using Entities.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+
 
 namespace RoomRental.Server.Extensions;
 
@@ -71,15 +72,35 @@ public static class ServiceExtensions
                     Url = new Uri("https://www.linkedin.com/in/thamsanqa-gumede-5aa461319/")
                 }
             });
+
             //s.SwaggerDoc("v2", new OpenApiInfo
             //{
             //    Title = "Room Rental API",
             //    Version = "v2"
             //});
+
+            //s.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+            //{
+            //    Name = "Authorization",
+            //    In = ParameterLocation.Header,
+            //    Type = SecuritySchemeType.Http,
+            //    Scheme = "bearer",
+            //    BearerFormat = "JWT",
+            //    Description = "JWT Authorization header using the Bearer scheme.",
+
+
+            //});
+
+            //s.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            //{
+            //  { new OpenApiSecuritySchemeReference("Bearer", document), new List<string> { "webapi" } },
+            //});
+
             var xmlFile = $"{typeof(Presentation.AssemblyReference).Assembly.GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             s.IncludeXmlComments(xmlPath);
         });
+
     }
 
     public static void ConfigureIdentity(this IServiceCollection services)
@@ -104,24 +125,24 @@ public static class ServiceExtensions
             File.ReadAllText("/run/secrets/jwt_secret").Trim()
             : jwtSettings["secretKey"];
 
-    services.AddAuthentication(opt =>
-        {
-            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-            .AddJwtBearer(options =>
+        services.AddAuthentication(opt =>
             {
-                options.TokenValidationParameters = new TokenValidationParameters
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
 
-                    ValidIssuer = jwtSettings["validIssuer"],
-                    ValidAudience = jwtSettings["validAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-                };
-            });
+                        ValidIssuer = jwtSettings["validIssuer"],
+                        ValidAudience = jwtSettings["validAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                    };
+                });
     }
 }

@@ -1,14 +1,15 @@
-using NLog;
+using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-
-using Contracts;
+using Microsoft.OpenApi;
+using NLog;
 using Repository;
 using RoomRental.Presentation.ActionFilters;
 using RoomRental.Server;
 using RoomRental.Server.Extensions;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var licenseKey = File.Exists("/run/secrets/automapper_license")
@@ -57,14 +58,16 @@ if (app.Environment.IsProduction())
 
 }
 
-
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 
-app.UseSwaggerUI(s =>
-{
-    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Rental API v1");
-    //s.SwaggerEndpoint("/swagger/v2/swagger.json", "Room Rental API v2");
+//app.UseSwaggerUI(s =>
+//{
+//    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Rental API v1");
+//    //s.SwaggerEndpoint("/swagger/v2/swagger.json", "Room Rental API v2");
+//});
+app.MapScalarApiReference(options=>{
+    options.OpenApiRoutePattern = "/swagger/{documentName}/swagger.json";
 });
 
 app.UseHttpsRedirection();

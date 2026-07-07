@@ -10,6 +10,7 @@ using Shared.DataTransferObjects;
 
 namespace RoomRental.Presentation.Controllers;
 
+[Consumes("application/json")]
 [Produces("application/json")]
 [ApiVersion("1.0")]
 [Route("api/apartments/{apartmentId}/addresses")]
@@ -27,9 +28,6 @@ public class AddressesController : ControllerBase
     /// </summary>
     /// <param name="apartmentId">The unique identifier of the apartment</param>
     /// <param name="id">The unique identifier of the address</param>
-    /// <returns>The address associated with the specified apartment</returns>
-    /// <response code="200">Returns the apartment address</response>
-    /// <response code="404">Apartment with the provided ID was not found</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(AddressDto), StatusCodes.Status201Created)]
     [ProducesResponseType(404)]
@@ -46,10 +44,6 @@ public class AddressesController : ControllerBase
     /// <param name="apartmentId">The unique identifier of the apartment</param>
     /// <param name="id">The unique identifier of the address to update</param>
     /// <param name="address">The updated address data</param>
-    /// <returns>No content on success</returns>
-    /// <response code="204">Address successfully updated</response>
-    /// <response code="400">Invalid request payload or missing required fields</response>
-    /// <response code="404">Apartment or address with the provided ID was not found</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
@@ -71,13 +65,11 @@ public class AddressesController : ControllerBase
     /// <param name="apartmentId">The unique identifier of the apartment</param>
     /// <param name="id">The unique identifier of the address to update</param>
     /// <param name="patchDoc">The JSON Patch document containing the partial update operations</param>
-    /// <returns>No content on success</returns>
-    /// <response code="204">Address successfully updated</response>
-    /// <response code="400">Invalid or null patch document</response>
-    /// <response code="404">Apartment or address with the provided ID was not found</response>
     [HttpPatch("{id:guid}")]
-    [ProducesResponseType(204)]
+    [Consumes("application/json-patch+json")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(404)]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> PartiallyUpdateAddressForApartment(Guid apartmentId, Guid id,
