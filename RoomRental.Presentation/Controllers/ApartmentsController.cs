@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using RoomRental.Presentation.ActionFilters;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
+using System.Text.Json;
 
 namespace RoomRental.Presentation.Controllers;
 
@@ -24,10 +26,11 @@ public class ApartmentsController : ControllerBase
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ApartmentDto>), StatusCodes.Status201Created)]
-    public async Task<IActionResult> GetApartments()
+    public async Task<IActionResult> GetApartments([FromQuery] ApartmentParameters apartmentParameters)
     {
-        var apartments = await _service.ApartmentService.GetAllApartmentsAsync(trackChanges: false);
-        return Ok(apartments);
+        var pagedResult = await _service.ApartmentService.GetAllApartmentsAsync(apartmentParameters, trackChanges: false);
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+        return Ok(pagedResult.apartments);
     }
 
     /// <summary>
@@ -51,7 +54,7 @@ public class ApartmentsController : ControllerBase
     [ProducesResponseType(typeof(ApartmentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    [Authorize(Roles ="Manager")]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> CreateApartment([FromBody] ApartmentForCreationDto apartment)
     {
         var createdAparment = await _service.ApartmentService.CreateApartmentAsync(apartment);
