@@ -4,6 +4,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace Service;
 
@@ -20,19 +21,19 @@ internal sealed class ApartmentService : IApartmentService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ApartmentsDto>> GetAllApartmentsAsync(bool trackChanges)
+    public async Task<(IEnumerable<ApartmentDto> apartments, MetaData metaData)> GetAllApartmentsAsync(ApartmentParameters apartmentParameters, bool trackChanges)
     {
-        var apartments = await _repository.Apartment.GetAllApartmentsAsync(trackChanges);
-        var aprtmentsDto = _mapper.Map<IEnumerable<ApartmentsDto>>(apartments);
+        var apartmentsWithMetaData = await _repository.Apartment.GetAllApartmentsAsync(apartmentParameters, trackChanges);
+        var aprtmentsDto = _mapper.Map<IEnumerable<ApartmentDto>>(apartmentsWithMetaData);
 
-        return aprtmentsDto;
+        return (apartments: aprtmentsDto, metaData: apartmentsWithMetaData.MetaData);
     }
 
     public async Task<ApartmentDto> GetApartmentAsync(Guid id, bool trackChanges)
     {
         var apartment = await GetApartmentAndCheckIfItExists(id, trackChanges);
-
         var apartmentDto = _mapper.Map<ApartmentDto>(apartment);
+
         return apartmentDto;
     }
 
@@ -42,7 +43,6 @@ internal sealed class ApartmentService : IApartmentService
 
         _repository.Apartment.CreateApartment(apartmentEntity);
         await _repository.SaveAsync();
-
         var apartmentToReturn = _mapper.Map<ApartmentDto>(apartmentEntity);
 
         return apartmentToReturn;
@@ -69,6 +69,8 @@ internal sealed class ApartmentService : IApartmentService
         var apartment = await _repository.Apartment.GetApartmentAsync(id, trackChanges);
         if (apartment is null)
             throw new ApartmentNotFoundException(id);
+
         return apartment;
     }
+
 }

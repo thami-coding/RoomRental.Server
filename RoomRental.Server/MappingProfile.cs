@@ -8,8 +8,6 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-
-        CreateMap<Apartment, ApartmentsDto>();
         CreateMap<Apartment, ApartmentDto>();
         CreateMap<Address, AddressDto>();
         CreateMap<Image, ImageDto>();

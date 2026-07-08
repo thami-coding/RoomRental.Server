@@ -1,17 +1,18 @@
-﻿using Asp.Versioning;
-using Contracts;
-using Entities.Models;
-using LoggerService;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
-using Repository;
-using Service;
-using Service.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+using Asp.Versioning;
 using System.Text;
+
+using Contracts;
+using Service;
+using Repository;
+using LoggerService;
+using Entities.Models;
+using Service.Contracts;
 
 
 namespace RoomRental.Server.Extensions;
@@ -24,7 +25,8 @@ public static class ServiceExtensions
             options.AddPolicy("CorsPolicy", builder =>
             builder.AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .WithExposedHeaders("X-Pagination"));
         });
 
     public static void ConfigureLoggerService(this IServiceCollection services) =>
